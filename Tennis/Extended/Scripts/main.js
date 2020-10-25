@@ -9,44 +9,55 @@ window.addEventListener("keyup",
 	function(keyInfo) {
 		delete heldDown[event.keyCode];
 	}, false);
-let player=new paddle(5, 200, 25, 100);
-let ai=new paddle(610, 200, 25, 100);
-let ball={
-		x:320, y: 240, radius:8, xSpeed:5,ySpeed:0,
-		reverseX: function() {
-			this.xSpeed *= -1;
-		},
-		reverseY: function() {
-			this.ySpeed *= -1;
-		},
-		reset: function() {
-			this.x = 320;
-			this.y = 240;
-			this.xSpeed = 5;
-			this.ySpeed = 0;
-		},
-		isBouncing: function(){
-			return ball.ySpeed != 0;
-		},
-		modifyXSpeedBy: function(modification){
-			let nextModification = this.xSpeed < 0 ? -modification : modification;
-			let nextValue = this.xSpeed + nextModification;
-			if (nextValue > 9)
-				nextValue = 9;
-			if (nextValue < -9)
-				nextValue = -9;
-			this.xSpeed = nextValue;
-		},
-		modifyYSpeedBy: function(modification){
-			let nextValue=this.ySpeed < 0 ? -modification : modification;
-			this.ySpeed += nextValue;
-		}
+
+let ball = {
+	x:320, y: 240, radius:8, xSpeed:5,ySpeed:0,
+	reverseX: function() {
+		this.xSpeed *= -1;
+	},
+	reverseY: function() {
+		this.ySpeed *= -1;
+	},
+	reset: function() {
+		this.x = 320;
+		this.y = 240;
+		this.xSpeed = 5;
+		this.ySpeed = 0;
+	},
+	isBouncing: function(){
+		return ball.ySpeed != 0;
+	},
+	modifyXSpeedBy: function(modification){
+		let nextModification = this.xSpeed < 0 ? -modification : modification;
+		let nextValue = this.xSpeed + nextModification;
+		if (nextValue > 9)
+			nextValue = 9;
+		if (nextValue < -9)
+			nextValue = -9;
+		this.xSpeed = nextValue;
+	},
+	modifyYSpeedBy: function(modification){
+		let nextValue=this.ySpeed < 0 ? -modification : modification;
+		this.ySpeed += nextValue;
+	}
 };
-function paddle(x, y, width, height) {
+let player = new paddle(5, 200, 25, 100, "white");
+let ai = new paddle(610, 200, 25, 100, "red");
+let gameMap = new map(0, 0, 640, 480, "green");
+
+function map(x, y, width, height, fillStyle) {
+	this.x=x;
+	this.y=y;
+	this.width = width;
+	this.height = height; 
+	this.fillStyle = fillStyle;
+}
+function paddle(x, y, width, height, fillStyle) {
 	this.x=x;
 	this.y=y;
 	this.width=width;
 	this.height=height;
+	this.fillStyle = fillStyle;
 	this.speedModifier=0;
 	this.hasCollidedWith = function(ball) {
 		let paddleLeftWall = this.x;
@@ -112,6 +123,7 @@ function updateGame() {
 	if(aiMiddle > ball.y)
 		ai.move(38);
 }
+
 function renderBall(ball) {
 	ctx.beginPath();
 	ctx.arc(ball.x,ball.y,ball.radius,0,2*Math.PI,false);
@@ -119,14 +131,19 @@ function renderBall(ball) {
 	ctx.fill();
 }
 function renderPaddle(paddle) {
-	ctx.fillStyle="white";
+	ctx.fillStyle=paddle.fillStyle;
 	ctx.fillRect(paddle.x,paddle.y,paddle.width,paddle.height);
 }
+function renderMap(map) {
+	ctx.fillStyle=map.fillStyle;
+	ctx.fillRect(map.x,map.y,map.width,map.height);
+}
+
 function draw() {
-	ctx.fillStyle="black";
-	ctx.fillRect(0,0,640,480);
+	renderMap(gameMap);
 	renderPaddle(player);
 	renderPaddle(ai);
 	renderBall(ball);
 }
+
 tick();
