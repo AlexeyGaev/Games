@@ -43,14 +43,15 @@ let ball = {
 };
 let player = new paddle(5, 200, 25, 100, "white");
 let ai = new paddle(610, 200, 25, 100, "red");
-let gameMap = new map(0, 0, 640, 480, "green");
+let gameMap = new map(0, 0, 640, 480, "green", 2);
 
-function map(x, y, width, height, fillStyle) {
+function map(x, y, width, height, fillStyle, borderWidth) {
 	this.x=x;
 	this.y=y;
 	this.width = width;
 	this.height = height; 
 	this.fillStyle = fillStyle;
+	this.borderWidth = borderWidth;
 }
 function paddle(x, y, width, height, fillStyle) {
 	this.x=x;
@@ -59,6 +60,7 @@ function paddle(x, y, width, height, fillStyle) {
 	this.height=height;
 	this.fillStyle = fillStyle;
 	this.speedModifier=0;
+	this.count=0;
 	this.hasCollidedWith = function(ball) {
 		let paddleLeftWall = this.x;
 		let paddleRightWall = this.x + this.width;
@@ -97,7 +99,12 @@ function tick() {
 function updateGame() {
 	ball.x += ball.xSpeed;
 	ball.y += ball.ySpeed;
-	if(ball.x < 0 || ball.x > 640){
+	if(ball.x < 0) {
+		ai.count++;
+		ball.reset();
+	}
+	if(ball.x > 640){
+		player.count++;
 		ball.reset();
 	}
 	if(ball.y <= 0 || ball.y >=480){
@@ -135,8 +142,10 @@ function renderPaddle(paddle) {
 	ctx.fillRect(paddle.x,paddle.y,paddle.width,paddle.height);
 }
 function renderMap(map) {
+	ctx.fillStyle="black";
+	ctx.fillRect(map.x,map.y, map.width,map.height);
 	ctx.fillStyle=map.fillStyle;
-	ctx.fillRect(map.x,map.y,map.width,map.height);
+	ctx.fillRect(map.x + map.borderWidth,map.y + map.borderWidth, map.width - 2 * map.borderWidth, map.height - 2 * map.borderWidth);
 }
 
 function draw() {
