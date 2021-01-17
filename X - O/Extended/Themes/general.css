@@ -1,18 +1,30 @@
-.names{
-	font-size: 32pt;
-	text-align: left;
-	background-color: yellow;
-}
-.row div {
-	padding: 10px;
+.mapCell {
 	border: 3px solid black;
-	height: 70px;
-	width: 70px;
+	height: 50px;
+	width: 50px;
 	float: left;
 	background-color: #00FF00;
 	font-size: 32pt;
 	text-align: center;
 }
-.row {
+.mapRow {
 	clear: both;
-	}
+}
+.mapHeaderColumn {
+	border: 3px solid white;
+	height: 50px;
+	width: 50px;
+	float: left;
+	font-size: 24pt;
+	text-align: right;
+	vertical-align: middle;
+}
+.mapHeaderRow {
+	border: 3px solid white;
+	height: 50px;
+	width: 50px;
+	float: left;
+	font-size: 24pt;
+	text-align: center;
+	vertical-align: bottom;
+}
